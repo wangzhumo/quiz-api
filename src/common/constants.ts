@@ -1,0 +1,1 @@
+export const UCENTER_SERVICE = 'UCENTER_SERVICE';
