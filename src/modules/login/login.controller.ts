@@ -1,16 +1,20 @@
-import { Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { LoginService } from './login.service';
 
 @Controller('ucenter')
 export class LoginController {
-
-
   constructor(private readonly loginService: LoginService) {}
 
   @Post('register')
-  register(@Req() request: Request): string {
-    console.log('register', request);
-    return 'hello register';
+  async register(@Body() body: any) {
+    const ret = await this.loginService.register(
+      body.nick,
+      body.identityType,
+      body.identity,
+      body.credential,
+    );
+    console.log(ret)
+    return ret;
   }
 
   @Post('login')
@@ -23,7 +27,7 @@ export class LoginController {
   getBaseInfo(@Param('uid') params: string) {
     const uid = params;
     console.log('getBaseInfo', uid);
-    this.loginService.sendMessage(uid)
+    this.loginService.sendMessage(uid);
     return 'hello getBaseInfo';
   }
 }
