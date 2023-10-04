@@ -1,22 +1,19 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { ClientGrpc } from '@nestjs/microservices';
 import { UCENTER_SERVICE } from '../../common/constants';
 import { lastValueFrom } from 'rxjs';
 import { StatusCheck } from '../../common/status';
 import { ErrorCode } from '../../common/errorcode';
+import { UCenterService } from '../interfaces/ucenter.service';
 
 @Injectable()
-export class LoginService {
-  constructor(@Inject(UCENTER_SERVICE) private client: ClientProxy) {}
+export class LoginService implements OnModuleInit {
+  constructor(@Inject(UCENTER_SERVICE) private clientGrpc: ClientGrpc) {}
 
-  // @Client(UCenterServiceClientOption) private readonly client: ClientTCP;
+  private client: UCenterService;
 
-  sendMessage(uid: string) {
-    const command = { cmd: 'find_account' };
-    this.client.send<string>(command, uid).subscribe((value: string) => {
-      console.log('sendMessage subscribe', value);
-    });
-    console.log('sendMessage ', command, uid);
+  onModuleInit(): any {
+    this.client = this.clientGrpc.getService<UCenterService>('UCenterService');
   }
 
   /**
@@ -32,18 +29,24 @@ export class LoginService {
     identity: string,
     credential: string,
   ) {
-    const command = {
-      cmd: 'auth_account',
-    };
-    const ret = await lastValueFrom(this.client.send(command, {
-      nick: nick,
-      identity: identity,
-      identityType: identityType,
-      credential: credential,
-    }))
+    const ret = await lastValueFrom(
+      this.client.Register({
+        nick: nick,
+        identity: identity,
+        identityType: identityType,
+        credential: credential,
+      }),
+    );
     if (ret && ret.code !== ErrorCode.Ok) {
-      return StatusCheck.Code(ret.code, ret.data)
+      return StatusCheck.Code(ret.code);
     }
-    return StatusCheck.Ok(ret.data);
+    const registerRet = {
+      ...ret.data,
+      uid: ret.data.uid.toNumber(),
+      lastAt: ret.data.lastAt.toNumber(),
+      createdAt: ret.data.createdAt.toNumber(),
+      tokenExpire: ret.data.tokenExpire.toNumber(),
+    };
+    return StatusCheck.Ok(registerRet);
   }
 }

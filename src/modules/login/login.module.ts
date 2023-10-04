@@ -4,6 +4,7 @@ import { LoginService } from './login.service';
 import { UCENTER_SERVICE } from '../../common/constants';
 import { ConfigService } from '@nestjs/config';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
+import { join } from 'path';
 
 @Module({
   controllers: [LoginController],
@@ -14,11 +15,17 @@ import { ClientProxyFactory, Transport } from '@nestjs/microservices';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         return ClientProxyFactory.create({
-          transport: Transport.TCP,
+          transport: Transport.GRPC,
           options: {
-            host: configService.get<string>('MicroServer.host'),
-            port: configService.get<number>('MicroServer.port'),
-          },
+            url: '127.0.0.1:8000',
+            package: 'ucenter',
+            protoPath: join(__dirname,'../../../_proto/ucenter.proto'),
+            loader: {
+              enums: String,
+              objects: true,
+              arrays: true
+            }
+          }
         });
       },
     },

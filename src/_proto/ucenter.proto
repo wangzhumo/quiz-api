@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package ucenter;
+
+// user
+message AccountBaseInfo {
+  uint64 uid = 1;
+  string avatar = 2;
+  string nick = 3;
+  int32 status = 4;
+  string region = 5;
+  uint64 lastAt = 6;
+  uint64 createdAt = 7;
+}
+
+message AccountAuthInfo {
+  uint64 uid = 1;
+  string token = 2;
+  uint64 tokenExpire = 3;
+}
+
+message AccountInfo {
+  uint64 uid = 1;
+  string avatar = 2;
+  string nick = 3;
+  int32 status = 4;
+  string region = 5;
+  uint64 lastAt = 6;
+  uint64 createdAt = 7;
+  string token = 8;
+  uint64 tokenExpire = 9;
+}
+
+
+//  base info
+message CreateBaseAccountReq {
+  string nick = 1;
+  string region = 2;
+}
+
+message CreateBaseAccountResp {
+  int32 code = 1;
+  AccountBaseInfo data = 2;
+  string msg = 3;
+}
+
+message GetAccountReq {
+  int64 uid = 1;
+}
+
+message GetAccountResp {
+  int32 code = 1;
+  AccountBaseInfo data = 2;
+  string msg = 3;
+}
+
+
+// auth account
+message HasAuthAccountReq {
+  int32 identityType = 1;
+  string identity = 2;
+}
+
+message HasAuthAccountResp {
+  int32 code = 1;
+  AccountAuthInfo data = 2;
+  string msg = 3;
+}
+
+message CreateAuthAccountReq {
+  string nick = 1;
+  int32  identityType = 2;
+  string identity = 3;
+  string credential = 4;
+}
+
+message CreateAuthAccountResp {
+  int32 code = 1;
+  AccountInfo data = 2;
+  string msg = 3;
+}
+
+// login
+message LoginAuthReq {
+  int32  identityType = 1;
+  string identity = 2;
+  string credential = 3;
+}
+
+message LoginAuthResp {
+  int32 code = 1;
+  AccountAuthInfo data = 2;
+  string msg = 3;
+}
+
+message RegisterReq {
+  string nick = 1;
+  int32  identityType = 2;
+  string identity = 3;
+  string credential = 4;
+}
+
+message RegisterResp {
+  int32 code = 1;
+  AccountInfo data = 2;
+  string msg = 3;
+}
+
+service UCenterService {
+  // base account info
+  rpc GetAccount (GetAccountReq) returns (GetAccountResp) {}
+  rpc CreateBaseAccount (CreateBaseAccountReq) returns (CreateBaseAccountResp) {}
+  // auth account info
+  rpc HasAuthAccount (HasAuthAccountReq) returns (HasAuthAccountResp) {}
+  rpc CreateAuthAccount (CreateAuthAccountReq) returns (CreateAuthAccountResp) {}
+  // login
+  rpc LoginAuth (LoginAuthReq) returns (LoginAuthResp) {}
+  rpc Register (RegisterReq) returns (RegisterResp) {}
+}

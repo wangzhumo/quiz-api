@@ -25,9 +25,6 @@ export class LoginController {
 
   @Get('info/:uid')
   getBaseInfo(@Param('uid') params: string) {
-    const uid = params;
-    console.log('getBaseInfo', uid);
-    this.loginService.sendMessage(uid);
     return 'hello getBaseInfo';
   }
 }
