@@ -1,4 +1,4 @@
-import { AccountAuthInfo, AccountInfo } from './ucenter.interface';
+import { AccountAuthInfo, AccountInfo } from './ucenter.interface'
 
 export interface HasAuthAccountReq {
     identityType: number

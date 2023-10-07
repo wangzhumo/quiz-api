@@ -44,4 +44,3 @@ export interface AuthSignUpReq {
 export interface AuthSignUpResp {
     code: number
 }
-

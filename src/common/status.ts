@@ -1,11 +1,11 @@
-import { ErrorCode } from './errorcode';
+import { ErrorCode } from './errorcode'
 
 export class StatusCheck {
     static Ok(data?: any, message?: string) {
         return {
             code: ErrorCode.Ok,
             data: data,
-            msg: message
+            msg: message,
         }
     }
 
@@ -13,7 +13,7 @@ export class StatusCheck {
         return {
             code: ErrorCode.Failure,
             data: data,
-            msg: error
+            msg: error,
         }
     }
 
@@ -21,7 +21,7 @@ export class StatusCheck {
         return {
             code: code,
             data: data,
-            msg: message
+            msg: message,
         }
     }
 }

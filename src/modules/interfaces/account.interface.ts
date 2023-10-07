@@ -1,5 +1,4 @@
-import { AccountBaseInfo } from './ucenter.interface';
-
+import { AccountBaseInfo } from './ucenter.interface'
 
 export interface CreateBaseAccountReq {
     nick: string
