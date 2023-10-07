@@ -5,6 +5,7 @@ import { lastValueFrom } from 'rxjs';
 import { StatusCheck } from '../../common/status';
 import { ErrorCode } from '../../common/errorcode';
 import { UCenterService } from '../interfaces/ucenter.service';
+import { GetAccountResp } from '../interfaces/account.interface';
 
 @Injectable()
 export class LoginService implements OnModuleInit {
@@ -14,6 +15,22 @@ export class LoginService implements OnModuleInit {
 
   onModuleInit(): any {
     this.client = this.clientGrpc.getService<UCenterService>('UCenterService');
+  }
+
+  async accountInfo(uid: number) : Promise<GetAccountResp> {
+    const ret = await lastValueFrom(this.client.GetAccount({
+      uid: uid
+    }))
+    if (ret && ret.code !== ErrorCode.Ok) {
+      return StatusCheck.Code(ret.code);
+    }
+    const dbInfo = {
+      ...ret.data,
+      uid: ret.data.uid.toNumber(),
+      lastAt: ret.data.lastAt.toNumber(),
+      createdAt: ret.data.createdAt.toNumber(),
+    };
+    return StatusCheck.Ok(dbInfo);
   }
 
   /**

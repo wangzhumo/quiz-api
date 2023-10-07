@@ -106,6 +106,27 @@ message RegisterResp {
   string msg = 3;
 }
 
+// auth
+message AuthSignInReq {
+  int32  identityType = 1;
+  string identity = 2;
+  string credential = 3;
+}
+
+message AuthSignInResp {
+  int32 code = 1;
+}
+
+message AuthSignUpReq {
+  int32  identityType = 1;
+  string identity = 2;
+  string credential = 3;
+}
+
+message AuthSignUpResp {
+  int32 code = 1;
+}
+
 service UCenterService {
   // base account info
   rpc GetAccount (GetAccountReq) returns (GetAccountResp) {}
@@ -116,4 +137,7 @@ service UCenterService {
   // login
   rpc LoginAuth (LoginAuthReq) returns (LoginAuthResp) {}
   rpc Register (RegisterReq) returns (RegisterResp) {}
+  // sign
+  rpc AuthSignUp (AuthSignUpReq) returns (AuthSignUpResp) {}
+  rpc AuthSignIn (AuthSignInReq) returns (AuthSignInResp) {}
 }
