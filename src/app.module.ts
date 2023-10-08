@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { LoginModule } from './modules/login/login.module'
-import { AuthModule } from './modules/auth/auth.module'
 import Configuration from './configuration'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import { UCENTER_SERVICE } from './common/constants'
@@ -9,6 +8,9 @@ import { join } from 'path'
 import { WinstonModule } from 'nest-winston'
 import * as winston from 'winston'
 import 'winston-daily-rotate-file'
+import { ThrottlerModule } from '@nestjs/throttler'
+import { JwtModule } from '@nestjs/jwt'
+import { JwtStrategy } from './modules/jwt/jwt.strategy'
 
 @Module({
     imports: [
@@ -60,8 +62,32 @@ import 'winston-daily-rotate-file'
                 }),
             ],
         }),
+        ThrottlerModule.forRootAsync({
+            inject: [ConfigService],
+            imports: [ConfigModule],
+            useFactory: (config: ConfigService) => [
+                {
+                    ttl: config.get('throttler.ttl'),
+                    limit: config.get('throttler.limit'),
+                },
+            ],
+        }),
+        JwtModule.registerAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            global: true,
+            useFactory: async (config: ConfigService) => {
+                const secretValue = config.get<string>('JWT_SECRET')
+                return {
+                    secret: secretValue,
+                    signOptions: {
+                        expiresIn: '1d',
+                    },
+                }
+            },
+        }),
         LoginModule,
-        AuthModule,
     ],
+    providers: [JwtStrategy],
 })
 export class AppModule {}
