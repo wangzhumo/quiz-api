@@ -27,7 +27,7 @@ export class AllExceptionFilter implements ExceptionFilter {
             exceptioin: exception['name'],
             error: exception['response'] || 'Internal Server Error',
         }
-
+        console.log('🚫 ~ file:all-exception.filter method:catch line:30  -----', exception)
         this.logger.error('[ucenter]', responseBody)
         httpAdapter.reply(response, responseBody, httpStatus)
     }

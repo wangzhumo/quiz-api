@@ -23,8 +23,6 @@ export interface UCenterService {
 
     LoginAuth(data: LoginAuthReq): Observable<LoginAuthResp>
 
-    Register(data: RegisterReq): Observable<RegisterResp>
-
     AuthSignUp(data: AuthSignUpReq): Observable<AuthSignUpResp>
 
     AuthSignIn(data: AuthSignInReq): Observable<AuthSignInResp>

@@ -6,6 +6,9 @@ import { StatusCheck } from '../../common/status'
 import { ErrorCode } from '../../common/errorcode'
 import { UCenterService } from '../interfaces/ucenter.service'
 import { GetAccountResp } from '../interfaces/account.interface'
+import { BaseResponse } from '../interfaces/types'
+import { AccountInfo } from '../interfaces/ucenter.interface'
+import { AuthSignInResp, AuthSignUpResp } from '../interfaces/login.interface'
 
 @Injectable()
 export class LoginService implements OnModuleInit {
@@ -17,6 +20,10 @@ export class LoginService implements OnModuleInit {
         this.client = this.clientGrpc.getService<UCenterService>('UCenterService')
     }
 
+    /**
+     * get account base info
+     * @param uid
+     */
     async accountInfo(uid: number): Promise<GetAccountResp> {
         const ret = await lastValueFrom(
             this.client.GetAccount({
@@ -28,7 +35,7 @@ export class LoginService implements OnModuleInit {
         }
         const dbInfo = {
             ...ret.data,
-            uid: ret.data.uid.toNumber(),
+            uid: ret.data.uid.toString(),
             lastAt: ret.data.lastAt.toNumber(),
             createdAt: ret.data.createdAt.toNumber(),
         }
@@ -42,9 +49,9 @@ export class LoginService implements OnModuleInit {
      * @param identity
      * @param credential
      */
-    async register(nick: string, identityType: number, identity: string, credential: string) {
+    async register(nick: string, identityType: number, identity: string, credential: string): Promise<AuthSignUpResp> {
         const ret = await lastValueFrom(
-            this.client.Register({
+            this.client.AuthSignUp({
                 nick: nick,
                 identity: identity,
                 identityType: identityType,
@@ -56,11 +63,40 @@ export class LoginService implements OnModuleInit {
         }
         const registerRet = {
             ...ret.data,
-            uid: ret.data.uid.toNumber(),
+            uid: ret.data.uid.toString(),
             lastAt: ret.data.lastAt.toNumber(),
             createdAt: ret.data.createdAt.toNumber(),
-            tokenExpire: ret.data.tokenExpire.toNumber(),
         }
         return StatusCheck.Ok(registerRet)
+    }
+
+    /**
+     * login
+     * @param identityType
+     * @param identity
+     * @param credential
+     */
+    async login(identityType: number, identity: string, credential: string): Promise<AuthSignInResp> {
+        const ret = await lastValueFrom(
+            this.client.AuthSignIn({
+                credential: credential,
+                identity: identity,
+                identityType: identityType,
+            }),
+        )
+        // has this account ?
+        if (ret?.code !== ErrorCode.Ok) {
+            return StatusCheck.Code(ret?.code)
+        }
+        console.log('🚫 ~ file:login.service method:login line:91  -----', ret.data)
+        console.log('🚫 ~ file:login.service method:login line:91  -----', ret.data.uid.toString())
+        // return account info
+        const signInRet = {
+            ...ret.data,
+            uid: ret.data.uid.toString(),
+            lastAt: ret.data.lastAt.toNumber(),
+            createdAt: ret.data.createdAt.toNumber(),
+        }
+        return StatusCheck.Ok(signInRet)
     }
 }

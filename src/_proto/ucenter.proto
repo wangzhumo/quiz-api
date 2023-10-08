@@ -15,8 +15,11 @@ message AccountBaseInfo {
 
 message AccountAuthInfo {
   uint64 uid = 1;
-  string token = 2;
-  uint64 tokenExpire = 3;
+  int32  identityType = 2;
+  string identity = 3;
+  string username = 4;
+  string avatarUrl = 5;
+  string payload = 6;
 }
 
 message AccountInfo {
@@ -27,8 +30,11 @@ message AccountInfo {
   string region = 5;
   uint64 lastAt = 6;
   uint64 createdAt = 7;
-  string token = 8;
-  uint64 tokenExpire = 9;
+  int32 identityType = 8;
+  string identity = 9;
+  string username = 10;
+  string avatarUrl = 11;
+  string payload = 12;
 }
 
 
@@ -93,19 +99,6 @@ message LoginAuthResp {
   string msg = 3;
 }
 
-message RegisterReq {
-  string nick = 1;
-  int32  identityType = 2;
-  string identity = 3;
-  string credential = 4;
-}
-
-message RegisterResp {
-  int32 code = 1;
-  AccountInfo data = 2;
-  string msg = 3;
-}
-
 // auth
 message AuthSignInReq {
   int32  identityType = 1;
@@ -115,16 +108,21 @@ message AuthSignInReq {
 
 message AuthSignInResp {
   int32 code = 1;
+  AccountInfo data = 2;
+  string msg = 3;
 }
 
 message AuthSignUpReq {
-  int32  identityType = 1;
-  string identity = 2;
-  string credential = 3;
+  string nick = 1;
+  int32  identityType = 2;
+  string identity = 3;
+  string credential = 4;
 }
 
 message AuthSignUpResp {
   int32 code = 1;
+  AccountInfo data = 2;
+  string msg = 3;
 }
 
 service UCenterService {
@@ -134,10 +132,8 @@ service UCenterService {
   // auth account info
   rpc HasAuthAccount (HasAuthAccountReq) returns (HasAuthAccountResp) {}
   rpc CreateAuthAccount (CreateAuthAccountReq) returns (CreateAuthAccountResp) {}
-  // login
+  // sign/login
   rpc LoginAuth (LoginAuthReq) returns (LoginAuthResp) {}
-  rpc Register (RegisterReq) returns (RegisterResp) {}
-  // sign
   rpc AuthSignUp (AuthSignUpReq) returns (AuthSignUpResp) {}
   rpc AuthSignIn (AuthSignInReq) returns (AuthSignInResp) {}
 }

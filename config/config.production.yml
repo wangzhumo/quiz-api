@@ -2,3 +2,7 @@ micro:
     name: ucenter
     host: 127.0.0.1
     port: 8000
+
+throttler:
+    ttl: 10000
+    limit: 10

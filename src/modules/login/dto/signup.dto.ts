@@ -1,7 +1,7 @@
 import { IsEnum, IsNotEmpty, IsString, Length } from 'class-validator'
 import { IdentityType } from '../../../common/identityType'
 
-export class LoginAuthDto {
+export class SignUpAuthDto {
     @IsNotEmpty()
     @IsEnum(IdentityType)
     identityType: number

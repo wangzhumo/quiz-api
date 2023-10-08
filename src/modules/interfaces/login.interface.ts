@@ -33,9 +33,12 @@ export interface AuthSignInReq {
 
 export interface AuthSignInResp {
     code: number
+    data: AccountInfo
+    msg: string
 }
 
 export interface AuthSignUpReq {
+    nick: string
     identityType: number
     identity: string
     credential: string
@@ -43,4 +46,6 @@ export interface AuthSignUpReq {
 
 export interface AuthSignUpResp {
     code: number
+    data: AccountInfo
+    msg: string
 }

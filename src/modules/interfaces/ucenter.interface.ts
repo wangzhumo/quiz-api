@@ -2,8 +2,11 @@ import { Long } from '@grpc/proto-loader'
 
 export interface AccountAuthInfo {
     uid: Long
-    token: string
-    tokenExpire: Long
+    identityType: number
+    identity: string
+    username?: string
+    payload?: string
+    avatarUrl?: string
 }
 
 export interface AccountBaseInfo {
@@ -24,6 +27,9 @@ export interface AccountInfo {
     region: string
     lastAt: Long
     createdAt: Long
-    token: string
-    tokenExpire: Long
+    identityType: number
+    identity: string
+    username?: string
+    payload?: string
+    avatarUrl?: string
 }
