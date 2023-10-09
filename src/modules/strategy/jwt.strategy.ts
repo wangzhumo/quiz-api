@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(payload: any) {
-        console.log('🚫 ~ file:jwt.strategy method:validate line:18  -----', payload)
+        console.log('🚫 ~ file:strategy.strategy method:validate line:18  -----', payload)
         // get data from payload
         return {
             uid: payload.uid,

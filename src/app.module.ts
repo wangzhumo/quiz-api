@@ -10,7 +10,8 @@ import * as winston from 'winston'
 import 'winston-daily-rotate-file'
 import { ThrottlerModule } from '@nestjs/throttler'
 import { JwtModule } from '@nestjs/jwt'
-import { JwtStrategy } from './modules/jwt/jwt.strategy'
+import { JwtStrategy } from './modules/strategy/jwt.strategy'
+import { GoogleStrategy } from './modules/strategy/google.strategy'
 
 @Module({
     imports: [
@@ -88,6 +89,6 @@ import { JwtStrategy } from './modules/jwt/jwt.strategy'
         }),
         LoginModule,
     ],
-    providers: [JwtStrategy],
+    providers: [JwtStrategy, GoogleStrategy],
 })
 export class AppModule {}

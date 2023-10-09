@@ -7,4 +7,8 @@ throttler:
     ttl: 10000
     limit: 10
 
-
+oauth:
+    google:
+        client_id: 248026969678-dcm6gadcon9ptm81o42r7cg8nn68qm0i.apps.googleusercontent.com
+        secret: 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
+        callback_path: oauth/google/redirect

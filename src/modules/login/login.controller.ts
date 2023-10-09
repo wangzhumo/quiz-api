@@ -8,7 +8,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston'
 import { SignInAuthDto } from './dto/signIn.dto'
 import { SignUpAuthDto } from './dto/signup.dto'
 import { ApiTags } from '@nestjs/swagger'
-import { AuthGuard } from '@nestjs/passport'
+import { JwtGuard } from '../../guards/jwt.gurad'
 
 @Controller('ucenter')
 export class LoginController {
@@ -38,8 +38,6 @@ export class LoginController {
                 identityType: ret.data.identityType,
             })
 
-            console.log('🚫 ~ file:login.controller method:signIn line:41  -----', token)
-            console.log('🚫 ~ file:login.controller method:signIn line:41  -----', ret)
             return StatusCheck.Ok({
                 ...ret.data,
                 access_token: token,
@@ -50,7 +48,7 @@ export class LoginController {
 
     @Get(':uid')
     @ApiTags('ucenter')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(JwtGuard)
     async getBaseInfo(@Param('uid', ParseIntPipe) uid: number) {
         return await this.loginService.accountInfo(uid)
     }

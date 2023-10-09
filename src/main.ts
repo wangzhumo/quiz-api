@@ -5,7 +5,7 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
 import { AllExceptionFilter } from './filters/all-exception.filter'
 import { Logger, ValidationPipe } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
-
+import addHeaderHook from './common/fastify-hook'
 async function bootstrap() {
     const fastifyAdapter = new FastifyAdapter({
         logger: true,
@@ -13,6 +13,9 @@ async function bootstrap() {
     const app = await NestFactory.create<NestFastifyApplication>(AppModule, fastifyAdapter, {
         cors: true,
     })
+
+    // setHeader for google oauth passport
+    addHeaderHook(app.getHttpAdapter().getInstance())
     // Swagger
     const config = new DocumentBuilder()
         .setTitle('Testing API')

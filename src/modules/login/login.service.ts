@@ -99,4 +99,8 @@ export class LoginService implements OnModuleInit {
         }
         return StatusCheck.Ok(signInRet)
     }
+
+    async googleLogin(params: any) {
+        console.log('🚫 ~ file:login.service method:googleLogin line:104  -----', params)
+    }
 }
