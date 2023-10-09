@@ -6,8 +6,6 @@ import { StatusCheck } from '../../common/status'
 import { ErrorCode } from '../../common/errorcode'
 import { UCenterService } from '../interfaces/ucenter.service'
 import { GetAccountResp } from '../interfaces/account.interface'
-import { BaseResponse } from '../interfaces/types'
-import { AccountInfo } from '../interfaces/ucenter.interface'
 import { AuthSignInResp, AuthSignUpResp } from '../interfaces/login.interface'
 
 @Injectable()
