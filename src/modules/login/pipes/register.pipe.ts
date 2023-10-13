@@ -1,6 +1,6 @@
 import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common'
 import { IdentityType } from '../../../common/identityType'
-import { SignUpAuthDto } from "../dto/signup.dto";
+import { SignUpAuthDto } from '../dto/signup.dto'
 
 @Injectable()
 export class RegisterPipe implements PipeTransform {
