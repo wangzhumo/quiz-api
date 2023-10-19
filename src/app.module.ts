@@ -12,6 +12,8 @@ import { ThrottlerModule } from '@nestjs/throttler'
 import { JwtModule } from '@nestjs/jwt'
 import { JwtStrategy } from './modules/strategy/jwt.strategy'
 import { GoogleStrategy } from './modules/strategy/google.strategy'
+import { MongooseModule } from '@nestjs/mongoose'
+import * as process from 'process'
 
 @Module({
     imports: [
@@ -83,6 +85,21 @@ import { GoogleStrategy } from './modules/strategy/google.strategy'
                     secret: secretValue,
                     signOptions: {
                         expiresIn: '1d',
+                    },
+                }
+            },
+        }),
+        MongooseModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: async (configService: ConfigService) => {
+                const uri = process.env['MONGODB_URL']
+                return {
+                    uri,
+                    dbName: process.env['MONGODB_DB'],
+                    auth: {
+                        username: process.env['MONGODB_USER'],
+                        password: process.env['MONGODB_PASSWORD'],
                     },
                 }
             },

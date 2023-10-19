@@ -12,4 +12,22 @@ services:
     env_file:
       - .env
     ports:
-      - 4000:4000
+      - "4000:4000"
+    depends_on:
+      - mongodb
+    network_mode: "host"
+
+  mongodb:
+    image: mongodb/mongodb-community-server
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - /Users/ease/Develop/database/mongodb/db:/data/db
+      - /Users/ease/Develop/database/mongodb/config:/data/config
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
+    command: --auth
+
