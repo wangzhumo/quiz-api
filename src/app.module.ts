@@ -13,6 +13,8 @@ import { JwtModule } from '@nestjs/jwt'
 import { JwtStrategy } from './modules/strategy/jwt.strategy'
 import { GoogleStrategy } from './modules/strategy/google.strategy'
 import { MongooseModule } from '@nestjs/mongoose'
+import { QuizController } from './modules/quiz/quiz.controller';
+import { QuizModule } from './modules/quiz/quiz.module';
 import * as process from 'process'
 
 @Module({
@@ -105,7 +107,9 @@ import * as process from 'process'
             },
         }),
         LoginModule,
+        QuizModule,
     ],
     providers: [JwtStrategy, GoogleStrategy],
+    controllers: [QuizController],
 })
 export class AppModule {}
