@@ -12,3 +12,4 @@ export class QTags extends Document {
     tag: string
 }
 export const QTagsSchema = SchemaFactory.createForClass(QTags)
+export type QTagsDocument = QTags & Document

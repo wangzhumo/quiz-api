@@ -31,6 +31,16 @@ export class Quiz extends Document {
 
     @Prop()
     tags: string
+
+    @Prop()
+    count: number
+
+    @Prop()
+    short: string
+
+    @Prop()
+    result: string
 }
 
 export const QuizSchema = SchemaFactory.createForClass(Quiz)
+export type QuizDocument = Quiz & Document
